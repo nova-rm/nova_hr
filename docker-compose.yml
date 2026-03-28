@@ -1,9 +1,0 @@
-# Desarrollo / pruebas en LAN: http://IP:8080
-# En VPS con dominio usa: docker compose -f docker-compose.prod.yml up -d --build
-
-services:
-  web:
-    build: .
-    ports:
-      - "8080:80"
-    restart: unless-stopped
