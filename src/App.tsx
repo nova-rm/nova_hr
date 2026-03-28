@@ -4,13 +4,12 @@ import { Reveal } from "./components/Reveal";
 
 /** Sustituye por tu enlace real de Calendly u otra herramienta de agenda. */
 const CALENDLY_URL = "https://calendly.com";
-
+/** Calendly URL */
 /** Mockups de producto (Unsplash — reemplaza por capturas reales de NOVA cuando las tengas). */
-const MOCKUP_DASHBOARD =
-  "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=85&auto=format&fit=crop";
-const MOCKUP_PIPELINE =
-  "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=85&auto=format&fit=crop";
+const MOCKUP_DASHBOARD = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=85&auto=format&fit=crop";
+const MOCKUP_PIPELINE = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=85&auto=format&fit=crop";
 
+/** Flow steps */
 const flowSteps = [
   {
     n: "01",
