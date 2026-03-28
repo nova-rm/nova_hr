@@ -1,0 +1,10 @@
+# Producción: puerto 80 del servidor → Nginx en el contenedor.
+# Uso: docker compose -f docker-compose.prod.yml up -d --build
+# El DNS (registro A) debe apuntar a la IP pública de ESTE servidor.
+
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    restart: unless-stopped
