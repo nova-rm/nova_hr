@@ -521,7 +521,7 @@ export default function App() {
                 <p className="contact-card__role">Business Analyst</p>
                 <p className="contact-card__company">NOVA Group</p>
                 <div className="contact-card__links">
-                  <a href="mailto:rr36693904@gmail.com">rr36693904@gmail.com</a>
+                  <a href="mailto:rr36693904@gmail.com">r.rivera@novahr.group</a>
                   <a href="tel:+50232865479">+502 3286-5479</a>
                 </div>
               </div>
@@ -537,7 +537,7 @@ export default function App() {
                   Agendar en el calendario
                 </a>
                 <a
-                  href="mailto:rr36693904@gmail.com"
+                  href="mailto:r.rivera@novahr.group"
                   className="btn btn--ghost btn--large"
                 >
                   Escribir por correo
