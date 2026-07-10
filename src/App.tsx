@@ -96,7 +96,7 @@ const contacts = [
     name: "Randy Rivera",
     role: "Business Analyst",
     company: "NOVA",
-    email: "rr36693904@gmail.com",
+    email: "r.rivera@novahr.group",
     phone: "+502 3286-5479",
     phoneHref: "tel:+50232865479",
   },
@@ -502,14 +502,23 @@ export default function App() {
               </p>
             </Reveal>
             <Reveal delayMs={80}>
-              <div className="contact-card">
-                <p className="contact-card__name">Randy Rivera</p>
-                <p className="contact-card__role">Business Analyst</p>
-                <p className="contact-card__company">NOVA Group</p>
-                <div className="contact-card__links">
-                  <a href="mailto:rr36693904@gmail.com">r.rivera@novahr.group</a>
-                  <a href="tel:+50232865479">+502 3286-5479</a>
-                </div>
+              <div className="contact-cards">
+                {contacts.map((contact, i) => (
+                  <Reveal key={contact.email} delayMs={i * 80} variant="scale">
+                    <div className="contact-card contact-card--featured">
+                      <span className="contact-card__badge">Equipo NOVA</span>
+                      <p className="contact-card__name">{contact.name}</p>
+                      <p className="contact-card__role">{contact.role}</p>
+                      <p className="contact-card__company">{contact.company}</p>
+                      <div className="contact-card__links">
+                        <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                        {contact.phone && contact.phoneHref && (
+                          <a href={contact.phoneHref}>{contact.phone}</a>
+                        )}
+                      </div>
+                    </div>
+                  </Reveal>
+                ))}
               </div>
             </Reveal>
             <Reveal delayMs={140}>
@@ -517,10 +526,7 @@ export default function App() {
                 <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--large">
                   Agendar en el calendario
                 </a>
-                <a
-                  href="mailto:r.rivera@novahr.group"
-                  className="btn btn--ghost btn--large"
-                >
+                <a href={MAILTO_ALL} className="btn btn--ghost btn--large">
                   Escribir por correo
                 </a>
               </div>
