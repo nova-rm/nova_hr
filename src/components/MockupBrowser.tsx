@@ -1,15 +1,19 @@
+import type { ReactNode } from "react";
+
 type MockupBrowserProps = {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
   urlBar?: string;
   className?: string;
+  children?: ReactNode;
 };
 
 export function MockupBrowser({
   src,
-  alt,
+  alt = "",
   urlBar = "app.nova.hr/dashboard",
   className = "",
+  children,
 }: MockupBrowserProps) {
   return (
     <div className={`mockup-browser ${className}`.trim()}>
@@ -34,7 +38,10 @@ export function MockupBrowser({
         </div>
       </div>
       <div className="mockup-browser__viewport">
-        <img src={src} alt={alt} loading="lazy" decoding="async" />
+        {children ??
+          (src ? (
+            <img src={src} alt={alt} loading="lazy" decoding="async" />
+          ) : null)}
       </div>
     </div>
   );
