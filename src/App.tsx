@@ -1,75 +1,123 @@
 import { useEffect, useState } from "react";
 import { MockupBrowser } from "./components/MockupBrowser";
+import { ProductMockupRanking } from "./components/ProductMockupRanking";
+import { ProductMockupVoice } from "./components/ProductMockupVoice";
+import { ThemeToggle } from "./components/ThemeToggle";
 import { Reveal } from "./components/Reveal";
 
-/** Sustituye por tu enlace real de Calendly u otra herramienta de agenda. */
 const CALENDLY_URL = "https://calendly.com";
-/** Calendly URL */
-/** Mockups de producto (Unsplash — reemplaza por capturas reales de NOVA cuando las tengas). */
-const MOCKUP_DASHBOARD = "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=85&auto=format&fit=crop";
-const MOCKUP_PIPELINE = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=85&auto=format&fit=crop";
 
-/** Flow steps */
+const navLinks = [
+  { href: "#verticales", label: "Industrias" },
+  { href: "#proceso", label: "Proceso" },
+  { href: "#producto", label: "Producto" },
+  { href: "#valor", label: "Valor" },
+  { href: "#faq", label: "FAQ" },
+  { href: "#contacto", label: "Contacto" },
+];
+
 const flowSteps = [
   {
     n: "01",
-    title: "Captura",
-    desc: "Centralizas postulaciones y criterios de la vacante en un solo flujo.",
+    title: "Filtrado de CVs",
+    desc: "En segundos, ranking con evidencia y red flags marcadas — sin revisar pilas a mano.",
   },
   {
     n: "02",
     title: "Entrevista IA",
-    desc: "Videollamadas iniciales guiadas que estandarizan la primera conversación.",
+    desc: "Primera conversación por voz, en español latino, natural y configurable por cada rol.",
   },
   {
     n: "03",
-    title: "Scoring",
-    desc: "Cada interacción se traduce en señales comparables y trazables.",
+    title: "Análisis",
+    desc: "Entrevista y análisis listos el mismo día, con criterios uniformes para todos los candidatos.",
   },
   {
     n: "04",
     title: "Decisión",
-    desc: "Tu equipo prioriza con contexto y datos, no solo con intuición.",
+    desc: "Tu equipo prioriza perfiles ya evaluados con el mismo estándar, en cualquier país o puesto.",
   },
 ];
 
 const stats = [
-  { value: "100%", label: "Entrevistas iniciales estructuradas" },
-  { value: "↓", label: "Menos ciclos repetitivos con candidatos" },
-  { value: "∞", label: "Escala sin multiplicar horas de RRHH" },
+  { value: "<5s", label: "Ranking de CVs con evidencia y red flags" },
+  { value: "Voz", label: "Entrevista por voz, no un cuestionario genérico" },
+  { value: "1 día", label: "Entrevista y análisis listos el mismo día" },
 ];
 
-function IconVideoAi() {
+const verticals = [
+  {
+    title: "Retail",
+    desc: "Cientos de postulaciones por tienda, mismo criterio en cada sucursal.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+        <path d="M3 9l2-5h14l2 5M5 9v11h14V9M9 20v-6h6v6" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    title: "BPO",
+    desc: "Screening masivo con evaluación uniforme para operaciones offshore.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+        <path d="M4 6h16M4 12h16M4 18h10" strokeLinecap="round" />
+        <circle cx="18" cy="18" r="3" />
+      </svg>
+    ),
+  },
+  {
+    title: "Call centers",
+    desc: "Entrevista por voz que evalúa comunicación real, no formularios.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+        <path d="M5 4h4l2 4-2 2a11 11 0 005 5l2-2 4 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+  },
+  {
+    title: "Ventas",
+    desc: "Ranking rápido con red flags antes de invertir tiempo del hiring manager.",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
+        <path d="M12 20V10M18 20V4M6 20v-4" strokeLinecap="round" />
+      </svg>
+    ),
+  },
+];
+
+const contacts = [
+  {
+    name: "Juan Pablo Vallejo",
+    role: "COO",
+    company: "NOVA",
+    email: "j.vallejo@novahr.group",
+  },
+  {
+    name: "Randy Rivera",
+    role: "Business Analyst",
+    company: "NOVA",
+    email: "rr36693904@gmail.com",
+    phone: "+502 3286-5479",
+    phoneHref: "tel:+50232865479",
+  },
+];
+
+const CONTACT_EMAILS = contacts.map((c) => c.email).join(",");
+const MAILTO_ALL = `mailto:${CONTACT_EMAILS}?subject=${encodeURIComponent("Consulta NOVA — Demo")}`;
+
+function IconVoice() {
   return (
-    <svg
-      className="benefit-card__icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <rect x="2" y="5" width="14" height="12" rx="2" />
-      <path d="M16 10l4-2v8l-4-2" />
-      <circle cx="8" cy="11" r="1.5" fill="currentColor" stroke="none" />
+    <svg className="benefit-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="9" y="2" width="6" height="11" rx="3" />
+      <path d="M5 10a7 7 0 0014 0M12 17v3" />
+      <path d="M8 21h8" />
     </svg>
   );
 }
 
 function IconScoring() {
   return (
-    <svg
-      className="benefit-card__icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
+    <svg className="benefit-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M4 19V5" />
       <path d="M4 19h16" />
       <path d="M8 15v-4" />
@@ -82,83 +130,35 @@ function IconScoring() {
 
 function IconFilter() {
   return (
-    <svg
-      className="benefit-card__icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
+    <svg className="benefit-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
       <path d="M4 5h16l-6 7v5l-4 2v-7L4 5z" />
-    </svg>
-  );
-}
-
-function IconSpeed() {
-  return (
-    <svg
-      className="benefit-card__icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 7v5l3 2" />
-    </svg>
-  );
-}
-
-function IconAnalytics() {
-  return (
-    <svg
-      className="benefit-card__icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M4 19h16" />
-      <path d="M4 15l4-4 4 3 4-6 4 3" />
-      <circle cx="8" cy="11" r="1" fill="currentColor" stroke="none" />
-      <circle cx="12" cy="14" r="1" fill="currentColor" stroke="none" />
-      <circle cx="16" cy="8" r="1" fill="currentColor" stroke="none" />
-      <circle cx="20" cy="11" r="1" fill="currentColor" stroke="none" />
     </svg>
   );
 }
 
 const faqItems = [
   {
-    q: "¿Cómo reducir el tiempo invertido en entrevistas iniciales repetitivas?",
-    a: "NOVA automatiza la primera conversación con videollamadas guiadas por IA, de modo que tu equipo solo profundiza con perfiles ya validados.",
+    q: "¿Cómo dejar de revisar pilas de CVs a mano?",
+    a: "NOVA filtra y rankea postulaciones en segundos, con evidencia y red flags marcadas, para que el recruiter deje de perder horas en screening manual.",
   },
   {
-    q: "¿Qué candidatos presentan un mejor nivel de ajuste desde la primera entrevista?",
-    a: "Cada interacción genera un scoring objetivo alineado a la vacante, para que compares talento con criterios uniformes desde el día uno.",
+    q: "¿La entrevista con IA es un cuestionario genérico?",
+    a: "No. Es una conversación por voz, en español latino, natural y configurable por cada rol — no un formulario estándar para todos los puestos.",
   },
   {
-    q: "¿Cómo disminuir la subjetividad en el proceso de selección?",
-    a: "Estructuramos la evaluación en datos comparables y trazables, reduciendo sesgos implícitos y discusiones sin fundamento.",
+    q: "¿Cuánto tarda en tener resultados listos?",
+    a: "La entrevista y el análisis quedan listos el mismo día, con criterios uniformes para que compares candidatos con el mismo estándar.",
   },
   {
-    q: "¿Cómo escalar la capacidad de reclutamiento sin incrementar los costos operativos?",
-    a: "La IA absorbe el volumen de screening inicial, permitiendo más postulantes evaluados con el mismo equipo de RRHH.",
+    q: "¿Para qué tipo de empresas sirve NOVA?",
+    a: "Sobre todo para alto volumen de aplicaciones — retail, BPO, call centers, ventas — o equipos de RRHH que reclutan en varios países o puestos y quieren evaluar a todos con el mismo criterio.",
   },
 ];
 
 export default function App() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setHeaderScrolled(window.scrollY > 20);
@@ -167,85 +167,100 @@ export default function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = mobileNavOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileNavOpen]);
+
+  const closeMobileNav = () => setMobileNavOpen(false);
+
   return (
     <div className="page" id="inicio">
-      <div className="glow-orb glow-orb--gold" aria-hidden />
-      <div className="glow-orb glow-orb--blue" aria-hidden />
       <div className="hero-mesh" aria-hidden />
 
-      <header
-        className={`site-header${headerScrolled ? " site-header--raised" : ""}`}
-      >
+      <header className={`site-header${headerScrolled ? " site-header--raised" : ""}`}>
         <div className="site-header__inner">
           <a href="#inicio" className="logo" aria-label="NOVA — Inicio">
-            <svg
-              className="logo__mark"
-              viewBox="0 0 32 32"
-              fill="none"
-              aria-hidden
-            >
-              <path
-                d="M16 5l2.4 7.8L27 15l-8.4 3L16 27l-2.4-7.8L5 15l8.4-3L16 5z"
-                stroke="#EAB308"
-                strokeWidth="1.2"
-              />
+            <svg className="logo__mark" viewBox="0 0 32 32" fill="none" aria-hidden>
+              <path d="M16 5l2.4 7.8L27 15l-8.4 3L16 27l-2.4-7.8L5 15l8.4-3L16 5z" stroke="currentColor" strokeWidth="1.2" />
             </svg>
             NOVA
           </a>
+
           <nav className="site-nav" aria-label="Principal">
-            <a href="#proceso">Proceso</a>
-            <a href="#producto">Producto</a>
-            <a href="#valor">Valor</a>
-            <a href="#faq">FAQ</a>
-            <a href="#contacto">Contacto</a>
+            {navLinks.map((link) => (
+              <a key={link.href} href={link.href}>{link.label}</a>
+            ))}
           </nav>
-          <a href="#contacto" className="btn btn--primary">
-            Agendar demo
-          </a>
+
+          <div className="site-header__actions">
+            <ThemeToggle />
+            <a href="#contacto" className="btn btn--primary site-header__cta">
+              Agendar demo
+            </a>
+            <button
+              type="button"
+              className="nav-toggle"
+              aria-expanded={mobileNavOpen}
+              aria-controls="mobile-nav"
+              aria-label={mobileNavOpen ? "Cerrar menú" : "Abrir menú"}
+              onClick={() => setMobileNavOpen((open) => !open)}
+            >
+              <span className="nav-toggle__bar" />
+              <span className="nav-toggle__bar" />
+            </button>
+          </div>
         </div>
       </header>
+
+      <div
+        id="mobile-nav"
+        className={`mobile-nav${mobileNavOpen ? " mobile-nav--open" : ""}`}
+        aria-hidden={!mobileNavOpen}
+      >
+        <div className="mobile-nav__backdrop" onClick={closeMobileNav} aria-hidden />
+        <nav className="mobile-nav__panel" aria-label="Menú móvil">
+          {navLinks.map((link) => (
+            <a key={link.href} href={link.href} onClick={closeMobileNav}>
+              {link.label}
+            </a>
+          ))}
+          <a href="#contacto" className="btn btn--primary btn--large" onClick={closeMobileNav}>
+            Agendar demo
+          </a>
+          <div className="mobile-nav__theme">
+            <ThemeToggle />
+            <span>Tema: automático / claro / oscuro</span>
+          </div>
+        </nav>
+      </div>
 
       <main>
         <section className="section hero" aria-labelledby="hero-title">
           <div className="section__inner hero__grid">
-            <Reveal>
-              <div className="hero__copy">
+            <Reveal variant="up" className="hero__copy-wrap">
+              <div className="hero__copy hero__copy--animate">
                 <h1 id="hero-title" className="hero__headline">
-                  <span className="hero__headline-line">
-                    Reclutamiento inteligente.
-                  </span>
-                  <span className="hero__headline-line hero__headline-line--accent">
-                    Decisiones objetivas.
-                  </span>
+                  <span className="hero__headline-line">Filtrado de CVs y entrevistas con IA.</span>
+                  <span className="hero__headline-line hero__headline-line--accent">Resultados el mismo día.</span>
                 </h1>
-                <p className="hero__tagline">
-                  Iluminando el potencial de tu equipo con IA.
-                </p>
+                <p className="hero__tagline">Automatizamos el reclutamiento para equipos con alto volumen.</p>
                 <p className="hero__desc">
-                  Transformamos las etapas de evaluación y entrevistas mediante
-                  analítica avanzada y tecnología aplicada.
+                  En segundos tenés el ranking con evidencia y red flags marcadas. La primera entrevista es por voz, en español latino, natural y configurable por cada rol — no es un cuestionario genérico.
                 </p>
                 <div className="hero__actions">
-                  <a href="#producto" className="btn btn--primary btn--large">
-                    Ver el producto
-                  </a>
-                  <a href="#contacto" className="btn btn--ghost btn--large">
-                    Habla con un experto
-                  </a>
+                  <a href="#contacto" className="btn btn--primary btn--large">Agendar demo</a>
+                  <a href="#producto" className="btn btn--ghost btn--large">Ver el producto</a>
                 </div>
               </div>
             </Reveal>
-            <Reveal delayMs={80}>
+            <Reveal delayMs={80} variant="scale">
               <div className="hero__mockup-wrap">
-                <MockupBrowser
-                  src={MOCKUP_DASHBOARD}
-                  alt="Vista tipo panel de analítica y métricas de reclutamiento"
-                  urlBar="app.nova.hr/analytics"
-                  className="hero__mockup"
-                />
-                <p className="hero__mockup-caption">
-                  Vista ilustrativa: sustituye por capturas reales de NOVA.
-                </p>
+                <MockupBrowser urlBar="app.nova.hr/ranking" className="hero__mockup">
+                  <ProductMockupRanking />
+                </MockupBrowser>
               </div>
             </Reveal>
           </div>
@@ -265,55 +280,78 @@ export default function App() {
 
         <section className="section section--tight-top" aria-labelledby="problema-titulo">
           <div className="section__inner split">
-            <Reveal>
+            <Reveal variant="left" className="split__reveal">
               <div className="split__panel split__panel--problem">
                 <p className="split__eyebrow">El desafío</p>
-                <h3 id="problema-titulo">Más postulaciones no bastan</h3>
+                <h3 id="problema-titulo">Las pilas de CVs comen horas</h3>
                 <p>
-                  El siguiente paso rara vez consiste únicamente en recibir más
-                  postulaciones, sino en convertir cada interacción inicial en
-                  información estructurada y accionable.
+                  Revisar postulaciones a mano y repetir entrevistas iniciales le quita tiempo al recruiter — sobre todo con alto volumen de aplicaciones.
                 </p>
               </div>
             </Reveal>
-            <Reveal delayMs={100}>
+            <Reveal delayMs={100} variant="right" className="split__reveal">
               <div className="split__panel split__panel--solution">
-                <p className="split__eyebrow split__eyebrow--gold">
-                  La solución NOVA
-                </p>
-                <h3>De la conversación al dato</h3>
+                <p className="split__eyebrow split__eyebrow--gold">La solución NOVA</p>
+                <h3>Filtrado y entrevista con IA</h3>
                 <p>
-                  Automatizamos la validación de aspectos generales a través de
-                  entrevistas iniciales por videollamada impulsadas por
-                  inteligencia artificial, generando un scoring para identificar a
-                  los mejores perfiles.
+                  NOVA automatiza el filtrado de CVs y la primera entrevista con IA. En segundos tenés el ranking con evidencia y red flags marcadas; la entrevista y el análisis quedan listos el mismo día.
                 </p>
               </div>
             </Reveal>
           </div>
         </section>
 
-        <section
-          className="section"
-          id="proceso"
-          aria-labelledby="proceso-titulo"
-        >
+        <section className="section" id="verticales" aria-labelledby="verticales-titulo">
+          <div className="section__inner">
+            <Reveal>
+              <p className="section__eyebrow">Industrias</p>
+              <h2 className="section__title" id="verticales-titulo">
+                Diseñado para alto volumen
+              </h2>
+              <p className="section__lead section__lead--wide">
+                Si tu equipo procesa decenas o cientos de postulaciones por vacante, NOVA está hecho para vos.
+              </p>
+            </Reveal>
+            <div className="verticals-grid">
+              {verticals.map((v, i) => (
+                <Reveal key={v.title} delayMs={i * 60}>
+                  <article className="vertical-card">
+                    <div className="vertical-card__icon">{v.icon}</div>
+                    <h3>{v.title}</h3>
+                    <p>{v.desc}</p>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section social-proof" aria-labelledby="social-titulo">
+          <div className="section__inner">
+            <Reveal>
+              <p className="social-proof__quote" id="social-titulo">
+                Equipos de RRHH en Centroamérica ya usan NOVA para reducir horas de screening manual y estandarizar la primera entrevista.
+              </p>
+              <p className="social-proof__note">
+                En piloto activo · Buscando nuevos clientes con procesos de alto volumen
+              </p>
+            </Reveal>
+          </div>
+        </section>
+
+        <section className="section" id="proceso" aria-labelledby="proceso-titulo">
           <div className="section__inner">
             <Reveal>
               <p className="section__eyebrow">Flujo</p>
-              <h2 className="section__title" id="proceso-titulo">
-                Del primer contacto a la decisión
-              </h2>
+              <h2 className="section__title" id="proceso-titulo">Del primer contacto a la decisión</h2>
               <p className="section__lead section__lead--wide">
-                Un recorrido claro para tu equipo: menos fricción operativa, más
-                señal en cada etapa — el mismo tipo de claridad que esperas de
-                herramientas de producto de primer nivel.
+                Pensado para retail, BPO, call centers, ventas y equipos de RRHH que reclutan en varios países o puestos — con el mismo criterio para cada candidato.
               </p>
             </Reveal>
             <div className="flow-grid">
               {flowSteps.map((step, i) => (
-                <Reveal key={step.n} delayMs={i * 70}>
-                  <div className="flow-card">
+                <Reveal key={step.n} delayMs={i * 90} variant="up">
+                  <div className={`flow-card${i % 2 === 1 ? " flow-card--open" : ""}`}>
                     <span className="flow-card__num">{step.n}</span>
                     <h3 className="flow-card__title">{step.title}</h3>
                     <p className="flow-card__desc">{step.desc}</p>
@@ -324,108 +362,82 @@ export default function App() {
           </div>
         </section>
 
-        <section
-          className="section section-showcase"
-          id="producto"
-          aria-labelledby="showcase-titulo"
-        >
+        <section className="section section-showcase" id="producto" aria-labelledby="showcase-titulo">
           <div className="section__inner showcase">
             <Reveal>
               <div className="showcase__text">
                 <p className="section__eyebrow">Producto</p>
                 <h2 className="section__title" id="showcase-titulo">
-                  Un cockpit para tu{" "}
-                  <em className="showcase__em">funnel de talento</em>
+                  Ranking, entrevista y análisis en un solo <em className="showcase__em">flujo</em>
                 </h2>
                 <p className="section__lead">
-                  Paneles, tablas y tendencias que convierten entrevistas en
-                  decisiones: información densa, presentada con calma — como en
-                  las mejores landing de infraestructura y datos.
+                  Del filtrado de CVs con evidencia y red flags a la entrevista por voz configurable por rol — todo listo el mismo día para que tu equipo decida con criterios uniformes.
                 </p>
-                <a href="#valor" className="btn btn--ghost btn--large">
-                  Explorar beneficios
-                </a>
               </div>
             </Reveal>
-            <Reveal delayMs={100}>
+            <Reveal delayMs={100} variant="scale">
               <div className="showcase__visual">
-                <MockupBrowser
-                  src={MOCKUP_PIPELINE}
-                  alt="Vista tipo tablero de trabajo y métricas en laptop"
-                  urlBar="app.nova.hr/pipeline"
-                  className="showcase__mockup"
-                />
+                <MockupBrowser urlBar="app.nova.hr/entrevista" className="showcase__mockup">
+                  <ProductMockupVoice />
+                </MockupBrowser>
               </div>
             </Reveal>
           </div>
         </section>
 
-        <section
-          className="section"
-          id="valor"
-          aria-labelledby="valor-titulo"
-        >
+        <section className="section" id="valor" aria-labelledby="valor-titulo">
           <div className="section__inner">
             <Reveal>
               <p className="section__eyebrow">Valor</p>
-              <h2 className="section__title" id="valor-titulo">
-                Dónde NOVA genera impacto
-              </h2>
-              <p className="section__lead" style={{ marginBottom: "2.5rem" }}>
-                Beneficios clave para equipos B2B que buscan velocidad, rigor y
-                analítica en selección.
+              <h2 className="section__title" id="valor-titulo">Dónde NOVA genera impacto</h2>
+              <p className="section__lead section__lead--wide" style={{ marginBottom: "2rem" }}>
+                Le ahorramos al recruiter las horas de screening manual y estandarizamos la evaluación en equipos con alto volumen o reclutamiento multi-país.
               </p>
             </Reveal>
-            <div className="benefits-grid">
+
+            <Reveal delayMs={40}>
+              <div className="benefit-highlight">
+                <span className="benefit-highlight__value">1 día</span>
+                <div>
+                  <h3>Resultados el mismo día</h3>
+                  <p>Entrevista y análisis listos sin esperar días de screening manual ni ciclos repetitivos con candidatos.</p>
+                </div>
+              </div>
+            </Reveal>
+
+            <div className="benefits-layout">
               <Reveal delayMs={0}>
                 <article className="benefit-card">
-                  <IconVideoAi />
-                  <h3>Automatización de entrevistas iniciales</h3>
-                  <p>
-                    Reducción de la carga operativa de RRHH mediante videollamadas
-                    con IA.
-                  </p>
+                  <IconVoice />
+                  <h3>Entrevista por voz con IA</h3>
+                  <p>Primera conversación en español latino, natural y configurable por cada rol — no un cuestionario genérico.</p>
                 </article>
               </Reveal>
               <Reveal delayMs={60}>
                 <article className="benefit-card">
                   <IconScoring />
-                  <h3>Scoring inteligente</h3>
-                  <p>
-                    Clasificación de perfiles según su nivel de ajuste con la
-                    vacante.
-                  </p>
+                  <h3>Ranking de CVs en segundos</h3>
+                  <p>Evidencia y red flags marcadas sin revisar pilas de postulaciones a mano.</p>
                 </article>
               </Reveal>
               <Reveal delayMs={120}>
                 <article className="benefit-card">
                   <IconFilter />
-                  <h3>Filtrado ágil y consistente</h3>
-                  <p>
-                    Disminución de la subjetividad con criterios comparables y
-                    trazables.
-                  </p>
+                  <h3>Mismo criterio para todos</h3>
+                  <p>Ideal para equipos que reclutan en varios países o puestos y quieren evaluar a cada candidato con el mismo estándar.</p>
                 </article>
               </Reveal>
-              <Reveal delayMs={180}>
-                <article className="benefit-card">
-                  <IconSpeed />
-                  <h3>Reducción de tiempos y costos</h3>
-                  <p>
-                    Aceleración del proceso de selección eliminando entrevistas
-                    repetitivas.
-                  </p>
-                </article>
-              </Reveal>
-              <Reveal delayMs={240}>
-                <article className="benefit-card">
-                  <IconAnalytics />
-                  <h3>Analítica para decisiones</h3>
-                  <p>
-                    Conversión de cada entrevista en datos útiles para identificar
-                    patrones.
-                  </p>
-                </article>
+            </div>
+
+            <div className="benefit-rows">
+              <Reveal delayMs={160}>
+                <div className="benefit-row">
+                  <span className="benefit-row__num">04</span>
+                  <div>
+                    <h3>Alto volumen de aplicaciones</h3>
+                    <p>Pensado para retail, BPO, call centers, ventas y cualquier operación con muchas postulaciones por vacante.</p>
+                  </div>
+                </div>
               </Reveal>
             </div>
           </div>
@@ -435,27 +447,17 @@ export default function App() {
           <div className="section__inner">
             <Reveal>
               <p className="section__eyebrow">Auto-calificación</p>
-              <h2 className="section__title" id="faq-titulo">
-                ¿Estás listo para modernizar tu gestión de talento?
-              </h2>
+              <h2 className="section__title" id="faq-titulo">¿Tu proceso de reclutamiento te está comiendo tiempo?</h2>
               <p className="section__lead section__lead--center">
-                Si estas preguntas resuenan contigo, NOVA encaja en tu operación.
+                Si estas preguntas resuenan contigo, con gusto te mostramos cómo funciona NOVA.
               </p>
             </Reveal>
             <Reveal delayMs={80}>
-              <div
-                className="accordion"
-                role="region"
-                aria-label="Preguntas frecuentes"
-              >
+              <div className="accordion" role="region" aria-label="Preguntas frecuentes">
                 {faqItems.map((item, index) => {
                   const isOpen = openFaq === index;
                   return (
-                    <div
-                      key={item.q}
-                      className="accordion__item"
-                      data-open={isOpen}
-                    >
+                    <div key={item.q} className="accordion__item" data-open={isOpen}>
                       <button
                         type="button"
                         className="accordion__trigger"
@@ -465,14 +467,7 @@ export default function App() {
                         onClick={() => setOpenFaq(isOpen ? null : index)}
                       >
                         <span>{item.q}</span>
-                        <svg
-                          className="accordion__chevron"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          aria-hidden
-                        >
+                        <svg className="accordion__chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
                           <path d="M6 9l6 6 6-6" />
                         </svg>
                       </button>
@@ -498,21 +493,12 @@ export default function App() {
           </div>
         </section>
 
-        <section
-          className="section footer-cta"
-          id="contacto"
-          aria-labelledby="cta-titulo"
-        >
-          <div className="footer-cta__glow" aria-hidden />
+        <section className="section footer-cta" id="contacto" aria-labelledby="cta-titulo">
           <div className="section__inner">
             <Reveal>
-              <h2 id="cta-titulo">
-                Comienza a tomar decisiones basadas en datos hoy.
-              </h2>
+              <h2 id="cta-titulo">Hablemos de tu proceso de reclutamiento.</h2>
               <p className="footer-cta__support">
-                Coordinemos una reunión presencial o virtual con nuestro equipo
-                para explorar cómo traducir estas capacidades en valor para tu
-                organización.
+                Estamos buscando clientes con alto volumen de aplicaciones o equipos de RRHH multi-país. Coordinemos una demo y te mostramos cómo funciona NOVA. Podés escribir a cualquiera de nuestro equipo o a ambos a la vez.
               </p>
             </Reveal>
             <Reveal delayMs={80}>
@@ -528,12 +514,7 @@ export default function App() {
             </Reveal>
             <Reveal delayMs={140}>
               <div className="footer-actions">
-                <a
-                  href={CALENDLY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn--primary btn--large"
-                >
+                <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--large">
                   Agendar en el calendario
                 </a>
                 <a
@@ -549,17 +530,7 @@ export default function App() {
       </main>
 
       <footer className="site-footer">
-        <p>© {new Date().getFullYear()} NOVA Group. Todos los derechos reservados.</p>
-        <p className="site-footer__credit">
-          Imágenes de demostración:{" "}
-          <a
-            href="https://unsplash.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Unsplash
-          </a>
-        </p>
+        <p>© {new Date().getFullYear()} NOVA. Todos los derechos reservados.</p>
       </footer>
     </div>
   );
