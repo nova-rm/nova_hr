@@ -102,9 +102,6 @@ const contacts = [
   },
 ];
 
-const CONTACT_EMAILS = contacts.map((c) => c.email).join(",");
-const MAILTO_ALL = `mailto:${CONTACT_EMAILS}?subject=${encodeURIComponent("Consulta NOVA — Demo")}`;
-
 function IconVoice() {
   return (
     <svg className="benefit-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -526,7 +523,10 @@ export default function App() {
                 <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--large">
                   Agendar en el calendario
                 </a>
-                <a href={MAILTO_ALL} className="btn btn--ghost btn--large">
+                <a
+                  href={`mailto:${contacts.map((c) => c.email).join(",")}?subject=${encodeURIComponent("Consulta NOVA — Demo")}`}
+                  className="btn btn--ghost btn--large"
+                >
                   Escribir por correo
                 </a>
               </div>
