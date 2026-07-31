@@ -1,9 +1,9 @@
 import { useTheme, type ThemePreference } from "../hooks/useTheme";
 
 const labels: Record<ThemePreference, string> = {
-  system: "Tema automático (día o noche según el sistema)",
-  light: "Tema claro",
-  dark: "Tema oscuro",
+  system: "Apariencia automática (según el sistema)",
+  light: "Apariencia clara",
+  dark: "Apariencia oscura",
 };
 
 export function ThemeToggle() {
