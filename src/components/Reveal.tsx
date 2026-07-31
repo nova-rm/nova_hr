@@ -1,5 +1,5 @@
-import type { CSSProperties, ReactNode } from "react";
-import { useReveal } from "../hooks/useReveal";
+import type { ReactNode } from "react";
+import { useAnimeReveal } from "../hooks/useAnimeReveal";
 
 type RevealVariant = "up" | "left" | "right" | "scale";
 
@@ -16,15 +16,10 @@ export function Reveal({
   delayMs = 0,
   variant = "up",
 }: RevealProps) {
-  const { ref, visible } = useReveal();
-  const style: CSSProperties = visible ? { transitionDelay: `${delayMs}ms` } : {};
+  const { ref } = useAnimeReveal(variant, delayMs);
 
   return (
-    <div
-      ref={ref}
-      className={`reveal reveal--${variant} ${visible ? "reveal--visible" : ""} ${className}`.trim()}
-      style={style}
-    >
+    <div ref={ref} className={`reveal ${className}`.trim()}>
       {children}
     </div>
   );

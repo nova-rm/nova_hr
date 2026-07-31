@@ -4,6 +4,7 @@ import { ProductMockupRanking } from "./components/ProductMockupRanking";
 import { ProductMockupVoice } from "./components/ProductMockupVoice";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { Reveal } from "./components/Reveal";
+import { getAnime } from "./lib/anime";
 
 const CALENDLY_URL = "https://calendly.com";
 
@@ -12,43 +13,43 @@ const navLinks = [
   { href: "#proceso", label: "Proceso" },
   { href: "#producto", label: "Producto" },
   { href: "#valor", label: "Valor" },
-  { href: "#faq", label: "FAQ" },
+  { href: "#faq", label: "Consultas" },
   { href: "#contacto", label: "Contacto" },
 ];
 
 const flowSteps = [
   {
     n: "01",
-    title: "Filtrado de CVs",
-    desc: "En segundos, ranking con evidencia y red flags marcadas — sin revisar pilas a mano.",
+    title: "Selección documental",
+    desc: "Clasificación de currículos en segundos, con evidencia y señales de alerta identificadas.",
   },
   {
     n: "02",
-    title: "Entrevista IA",
-    desc: "Primera conversación por voz, en español latino, natural y configurable por cada rol.",
+    title: "Entrevista oral",
+    desc: "Primera conversación por voz, en español latinoamericano, configurable según el perfil del cargo.",
   },
   {
     n: "03",
-    title: "Análisis",
-    desc: "Entrevista y análisis listos el mismo día, con criterios uniformes para todos los candidatos.",
+    title: "Análisis estructurado",
+    desc: "Entrevista y dictamen disponibles el mismo día, bajo criterios uniformes para cada candidato.",
   },
   {
     n: "04",
-    title: "Decisión",
-    desc: "Tu equipo prioriza perfiles ya evaluados con el mismo estándar, en cualquier país o puesto.",
+    title: "Decisión informada",
+    desc: "El equipo prioriza perfiles ya evaluados con el mismo estándar, en cualquier país o función.",
   },
 ];
 
 const stats = [
-  { value: "<5s", label: "Ranking de CVs con evidencia y red flags" },
-  { value: "Voz", label: "Entrevista por voz, no un cuestionario genérico" },
+  { value: "<5s", label: "Clasificación de currículos con evidencia y alertas" },
+  { value: "Voz", label: "Entrevista oral; no un cuestionario genérico" },
   { value: "1 día", label: "Entrevista y análisis listos el mismo día" },
 ];
 
 const verticals = [
   {
-    title: "Retail",
-    desc: "Cientos de postulaciones por tienda, mismo criterio en cada sucursal.",
+    title: "Comercio minorista",
+    desc: "Volumen elevado de postulaciones por sucursal, con el mismo criterio en cada local.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
         <path d="M3 9l2-5h14l2 5M5 9v11h14V9M9 20v-6h6v6" strokeLinecap="round" strokeLinejoin="round" />
@@ -57,7 +58,7 @@ const verticals = [
   },
   {
     title: "BPO",
-    desc: "Screening masivo con evaluación uniforme para operaciones offshore.",
+    desc: "Selección masiva con evaluación uniforme para operaciones internacionales.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
         <path d="M4 6h16M4 12h16M4 18h10" strokeLinecap="round" />
@@ -66,8 +67,8 @@ const verticals = [
     ),
   },
   {
-    title: "Call centers",
-    desc: "Entrevista por voz que evalúa comunicación real, no formularios.",
+    title: "Centros de contacto",
+    desc: "Entrevista por voz que valora la comunicación real, no únicamente formularios.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
         <path d="M5 4h4l2 4-2 2a11 11 0 005 5l2-2 4 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" strokeLinecap="round" strokeLinejoin="round" />
@@ -76,7 +77,7 @@ const verticals = [
   },
   {
     title: "Ventas",
-    desc: "Ranking rápido con red flags antes de invertir tiempo del hiring manager.",
+    desc: "Clasificación ágil con alertas antes de invertir el tiempo del responsable de contratación.",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden>
         <path d="M12 20V10M18 20V4M6 20v-4" strokeLinecap="round" />
@@ -88,13 +89,13 @@ const verticals = [
 const contacts = [
   {
     name: "Juan Pablo Vallejo",
-    role: "COO",
+    role: "Director de operaciones",
     company: "NOVA",
     email: "j.vallejo@novahr.group",
   },
   {
     name: "Randy Rivera",
-    role: "Business Analyst",
+    role: "Analista de negocio",
     company: "NOVA",
     email: "r.rivera@novahr.group",
     phone: "+502 3286-5479",
@@ -135,20 +136,20 @@ function IconFilter() {
 
 const faqItems = [
   {
-    q: "¿Cómo dejar de revisar pilas de CVs a mano?",
-    a: "NOVA filtra y rankea postulaciones en segundos, con evidencia y red flags marcadas, para que el recruiter deje de perder horas en screening manual.",
+    q: "¿Cómo prescindir de la revisión manual de currículos?",
+    a: "NOVA clasifica y ordena las postulaciones en segundos, con evidencia y señales de alerta marcadas, a fin de que el responsable de selección deje de destinar horas al cribado manual.",
   },
   {
-    q: "¿La entrevista con IA es un cuestionario genérico?",
-    a: "No. Es una conversación por voz, en español latino, natural y configurable por cada rol — no un formulario estándar para todos los puestos.",
+    q: "¿La entrevista con inteligencia artificial es un cuestionario genérico?",
+    a: "No. Se trata de una conversación por voz, en español latinoamericano, natural y configurable por cada cargo; no de un formulario estándar aplicable a todos los puestos.",
   },
   {
-    q: "¿Cuánto tarda en tener resultados listos?",
-    a: "La entrevista y el análisis quedan listos el mismo día, con criterios uniformes para que compares candidatos con el mismo estándar.",
+    q: "¿Cuál es el plazo para disponer de resultados?",
+    a: "La entrevista y el análisis quedan listos el mismo día, con criterios uniformes que permiten comparar candidatos bajo el mismo estándar.",
   },
   {
-    q: "¿Para qué tipo de empresas sirve NOVA?",
-    a: "Sobre todo para alto volumen de aplicaciones — retail, BPO, call centers, ventas — o equipos de RRHH que reclutan en varios países o puestos y quieren evaluar a todos con el mismo criterio.",
+    q: "¿Para qué tipo de organizaciones resulta pertinente NOVA?",
+    a: "En particular para operaciones de alto volumen —comercio minorista, BPO, centros de contacto, ventas— o equipos de recursos humanos que reclutan en varios países o funciones y requieren evaluar a todos con el mismo criterio.",
   },
 ];
 
@@ -170,6 +171,66 @@ export default function App() {
       document.body.style.overflow = "";
     };
   }, [mobileNavOpen]);
+
+  useEffect(() => {
+    const anime = getAnime();
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const nodes = document.querySelectorAll<HTMLElement>(
+      ".hero__brand, .hero__headline-line--accent, .hero__tagline, .hero__desc, .hero__actions"
+    );
+
+    if (!anime || reduced) {
+      nodes.forEach((el) => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+      return;
+    }
+
+    const tl = anime.timeline({ easing: "easeOutCubic" });
+    tl.add({
+      targets: ".hero__brand",
+      opacity: [0, 1],
+      translateY: [18, 0],
+      duration: 1100,
+    })
+      .add(
+        {
+          targets: ".hero__headline-line--accent",
+          opacity: [0, 1],
+          translateY: [12, 0],
+          duration: 900,
+        },
+        "-=700"
+      )
+      .add(
+        {
+          targets: ".hero__tagline",
+          opacity: [0, 1],
+          translateY: [10, 0],
+          duration: 800,
+        },
+        "-=550"
+      )
+      .add(
+        {
+          targets: ".hero__desc",
+          opacity: [0, 1],
+          translateY: [10, 0],
+          duration: 800,
+        },
+        "-=500"
+      )
+      .add(
+        {
+          targets: ".hero__actions",
+          opacity: [0, 1],
+          translateY: [8, 0],
+          duration: 750,
+        },
+        "-=450"
+      );
+  }, []);
 
   const closeMobileNav = () => setMobileNavOpen(false);
 
@@ -195,7 +256,7 @@ export default function App() {
           <div className="site-header__actions">
             <ThemeToggle />
             <a href="#contacto" className="btn btn--primary site-header__cta">
-              Agendar demo
+              Solicitar demostración
             </a>
             <button
               type="button"
@@ -225,11 +286,11 @@ export default function App() {
             </a>
           ))}
           <a href="#contacto" className="btn btn--primary btn--large" onClick={closeMobileNav}>
-            Agendar demo
+            Solicitar demostración
           </a>
           <div className="mobile-nav__theme">
             <ThemeToggle />
-            <span>Tema: automático / claro / oscuro</span>
+            <span>Apariencia: automática / clara / oscura</span>
           </div>
         </nav>
       </div>
@@ -237,23 +298,27 @@ export default function App() {
       <main>
         <section className="section hero" aria-labelledby="hero-title">
           <div className="section__inner hero__grid">
-            <Reveal variant="up" className="hero__copy-wrap">
+            <div className="hero__copy-wrap">
               <div className="hero__copy hero__copy--animate">
                 <h1 id="hero-title" className="hero__headline">
-                  <span className="hero__headline-line">Filtrado de CVs y entrevistas con IA.</span>
-                  <span className="hero__headline-line hero__headline-line--accent">Resultados el mismo día.</span>
+                  <span className="hero__brand">NOVA</span>
+                  <span className="hero__headline-line hero__headline-line--accent">
+                    Selección documental y entrevistas orales con inteligencia artificial.
+                  </span>
                 </h1>
-                <p className="hero__tagline">Automatizamos el reclutamiento para equipos con alto volumen.</p>
+                <p className="hero__tagline">
+                  Automatización del reclutamiento para equipos de alto volumen.
+                </p>
                 <p className="hero__desc">
-                  En segundos tenés el ranking con evidencia y red flags marcadas. La primera entrevista es por voz, en español latino, natural y configurable por cada rol — no es un cuestionario genérico.
+                  En cuestión de segundos se obtiene la clasificación con evidencia y señales de alerta. La primera entrevista se conduce por voz, en español latinoamericano, y se configura según cada cargo.
                 </p>
                 <div className="hero__actions">
-                  <a href="#contacto" className="btn btn--primary btn--large">Agendar demo</a>
-                  <a href="#producto" className="btn btn--ghost btn--large">Ver el producto</a>
+                  <a href="#contacto" className="btn btn--primary btn--large">Solicitar demostración</a>
+                  <a href="#producto" className="btn btn--ghost btn--large">Examinar el producto</a>
                 </div>
               </div>
-            </Reveal>
-            <Reveal delayMs={80} variant="scale">
+            </div>
+            <Reveal delayMs={120} variant="scale">
               <div className="hero__mockup-wrap">
                 <MockupBrowser urlBar="app.nova.hr/ranking" className="hero__mockup">
                   <ProductMockupRanking />
@@ -262,8 +327,8 @@ export default function App() {
             </Reveal>
           </div>
           <div className="section__inner hero__stats-wrap">
-            <Reveal delayMs={120}>
-              <ul className="stats-strip" aria-label="Propuestas de valor">
+            <Reveal delayMs={80}>
+              <ul className="stats-strip" aria-label="Indicadores de valor">
                 {stats.map((s) => (
                   <li key={s.label} className="stats-strip__item">
                     <span className="stats-strip__value">{s.value}</span>
@@ -280,18 +345,18 @@ export default function App() {
             <Reveal variant="left" className="split__reveal">
               <div className="split__panel split__panel--problem">
                 <p className="split__eyebrow">El desafío</p>
-                <h3 id="problema-titulo">Las pilas de CVs comen horas</h3>
+                <h3 id="problema-titulo">La revisión manual consume horas</h3>
                 <p>
-                  Revisar postulaciones a mano y repetir entrevistas iniciales le quita tiempo al recruiter — sobre todo con alto volumen de aplicaciones.
+                  Examinar postulaciones a mano y reiterar entrevistas iniciales detrae tiempo del especialista en selección, en particular ante un volumen elevado de aplicaciones.
                 </p>
               </div>
             </Reveal>
             <Reveal delayMs={100} variant="right" className="split__reveal">
               <div className="split__panel split__panel--solution">
-                <p className="split__eyebrow split__eyebrow--gold">La solución NOVA</p>
-                <h3>Filtrado y entrevista con IA</h3>
+                <p className="split__eyebrow split__eyebrow--gold">La propuesta NOVA</p>
+                <h3>Filtrado y entrevista asistidos</h3>
                 <p>
-                  NOVA automatiza el filtrado de CVs y la primera entrevista con IA. En segundos tenés el ranking con evidencia y red flags marcadas; la entrevista y el análisis quedan listos el mismo día.
+                  NOVA automatiza la selección de currículos y la primera entrevista mediante inteligencia artificial. En segundos se dispone del ordenamiento con evidencia; la entrevista y el análisis quedan listos el mismo día.
                 </p>
               </div>
             </Reveal>
@@ -303,15 +368,15 @@ export default function App() {
             <Reveal>
               <p className="section__eyebrow">Industrias</p>
               <h2 className="section__title" id="verticales-titulo">
-                Diseñado para alto volumen
+                Concebido para alto volumen
               </h2>
               <p className="section__lead section__lead--wide">
-                Si tu equipo procesa decenas o cientos de postulaciones por vacante, NOVA está hecho para vos.
+                Cuando el equipo procesa decenas o centenares de postulaciones por vacante, NOVA responde a esa exigencia operativa.
               </p>
             </Reveal>
             <div className="verticals-grid">
               {verticals.map((v, i) => (
-                <Reveal key={v.title} delayMs={i * 60}>
+                <Reveal key={v.title} delayMs={i * 70}>
                   <article className="vertical-card">
                     <div className="vertical-card__icon">{v.icon}</div>
                     <h3>{v.title}</h3>
@@ -327,10 +392,10 @@ export default function App() {
           <div className="section__inner">
             <Reveal>
               <p className="social-proof__quote" id="social-titulo">
-                Equipos de RRHH en Centroamérica ya usan NOVA para reducir horas de screening manual y estandarizar la primera entrevista.
+                Equipos de recursos humanos en Centroamérica emplean NOVA para reducir horas de cribado manual y estandarizar la primera entrevista.
               </p>
               <p className="social-proof__note">
-                En piloto activo · Buscando nuevos clientes con procesos de alto volumen
+                Piloto en curso · Incorporación de organizaciones con procesos de alto volumen
               </p>
             </Reveal>
           </div>
@@ -339,10 +404,10 @@ export default function App() {
         <section className="section" id="proceso" aria-labelledby="proceso-titulo">
           <div className="section__inner">
             <Reveal>
-              <p className="section__eyebrow">Flujo</p>
+              <p className="section__eyebrow">Secuencia</p>
               <h2 className="section__title" id="proceso-titulo">Del primer contacto a la decisión</h2>
               <p className="section__lead section__lead--wide">
-                Pensado para retail, BPO, call centers, ventas y equipos de RRHH que reclutan en varios países o puestos — con el mismo criterio para cada candidato.
+                Orientado a comercio minorista, BPO, centros de contacto, ventas y equipos de recursos humanos que reclutan en varios países o funciones, con el mismo criterio para cada candidato.
               </p>
             </Reveal>
             <div className="flow-grid">
@@ -365,10 +430,10 @@ export default function App() {
               <div className="showcase__text">
                 <p className="section__eyebrow">Producto</p>
                 <h2 className="section__title" id="showcase-titulo">
-                  Ranking, entrevista y análisis en un solo <em className="showcase__em">flujo</em>
+                  Clasificación, entrevista y análisis en un solo <em className="showcase__em">flujo</em>
                 </h2>
                 <p className="section__lead">
-                  Del filtrado de CVs con evidencia y red flags a la entrevista por voz configurable por rol — todo listo el mismo día para que tu equipo decida con criterios uniformes.
+                  Desde el filtrado documental con evidencia hasta la entrevista oral configurable por cargo: todo disponible el mismo día para decidir con criterios uniformes.
                 </p>
               </div>
             </Reveal>
@@ -386,9 +451,9 @@ export default function App() {
           <div className="section__inner">
             <Reveal>
               <p className="section__eyebrow">Valor</p>
-              <h2 className="section__title" id="valor-titulo">Dónde NOVA genera impacto</h2>
+              <h2 className="section__title" id="valor-titulo">Ámbitos de impacto de NOVA</h2>
               <p className="section__lead section__lead--wide" style={{ marginBottom: "2rem" }}>
-                Le ahorramos al recruiter las horas de screening manual y estandarizamos la evaluación en equipos con alto volumen o reclutamiento multi-país.
+                Se liberan horas de cribado manual y se estandariza la evaluación en equipos de alto volumen o de reclutamiento multi-país.
               </p>
             </Reveal>
 
@@ -397,7 +462,7 @@ export default function App() {
                 <span className="benefit-highlight__value">1 día</span>
                 <div>
                   <h3>Resultados el mismo día</h3>
-                  <p>Entrevista y análisis listos sin esperar días de screening manual ni ciclos repetitivos con candidatos.</p>
+                  <p>Entrevista y análisis disponibles sin aguardar jornadas de cribado manual ni ciclos reiterados con candidatos.</p>
                 </div>
               </div>
             </Reveal>
@@ -406,22 +471,22 @@ export default function App() {
               <Reveal delayMs={0}>
                 <article className="benefit-card">
                   <IconVoice />
-                  <h3>Entrevista por voz con IA</h3>
-                  <p>Primera conversación en español latino, natural y configurable por cada rol — no un cuestionario genérico.</p>
+                  <h3>Entrevista oral con inteligencia artificial</h3>
+                  <p>Primera conversación en español latinoamericano, natural y configurable por cada cargo.</p>
                 </article>
               </Reveal>
               <Reveal delayMs={60}>
                 <article className="benefit-card">
                   <IconScoring />
-                  <h3>Ranking de CVs en segundos</h3>
-                  <p>Evidencia y red flags marcadas sin revisar pilas de postulaciones a mano.</p>
+                  <h3>Clasificación de currículos en segundos</h3>
+                  <p>Evidencia y señales de alerta sin revisar pilas de postulaciones de forma manual.</p>
                 </article>
               </Reveal>
               <Reveal delayMs={120}>
                 <article className="benefit-card">
                   <IconFilter />
-                  <h3>Mismo criterio para todos</h3>
-                  <p>Ideal para equipos que reclutan en varios países o puestos y quieren evaluar a cada candidato con el mismo estándar.</p>
+                  <h3>Criterio uniforme</h3>
+                  <p>Adecuado para equipos que reclutan en varios países o funciones y requieren un mismo estándar de evaluación.</p>
                 </article>
               </Reveal>
             </div>
@@ -432,7 +497,7 @@ export default function App() {
                   <span className="benefit-row__num">04</span>
                   <div>
                     <h3>Alto volumen de aplicaciones</h3>
-                    <p>Pensado para retail, BPO, call centers, ventas y cualquier operación con muchas postulaciones por vacante.</p>
+                    <p>Concebido para comercio minorista, BPO, centros de contacto, ventas y toda operación con numerosas postulaciones por vacante.</p>
                   </div>
                 </div>
               </Reveal>
@@ -443,14 +508,14 @@ export default function App() {
         <section className="section" id="faq" aria-labelledby="faq-titulo">
           <div className="section__inner">
             <Reveal>
-              <p className="section__eyebrow">Auto-calificación</p>
-              <h2 className="section__title" id="faq-titulo">¿Tu proceso de reclutamiento te está comiendo tiempo?</h2>
+              <p className="section__eyebrow">Autoevaluación</p>
+              <h2 className="section__title" id="faq-titulo">¿El proceso de reclutamiento absorbe tiempo excesivo?</h2>
               <p className="section__lead section__lead--center">
-                Si estas preguntas resuenan contigo, con gusto te mostramos cómo funciona NOVA.
+                Si estas cuestiones resultan pertinentes, con gusto presentamos el funcionamiento de NOVA.
               </p>
             </Reveal>
             <Reveal delayMs={80}>
-              <div className="accordion" role="region" aria-label="Preguntas frecuentes">
+              <div className="accordion" role="region" aria-label="Consultas frecuentes">
                 {faqItems.map((item, index) => {
                   const isOpen = openFaq === index;
                   return (
@@ -493,9 +558,9 @@ export default function App() {
         <section className="section footer-cta" id="contacto" aria-labelledby="cta-titulo">
           <div className="section__inner">
             <Reveal>
-              <h2 id="cta-titulo">Hablemos de tu proceso de reclutamiento.</h2>
+              <h2 id="cta-titulo">Conversemos sobre su proceso de reclutamiento.</h2>
               <p className="footer-cta__support">
-                Estamos buscando clientes con alto volumen de aplicaciones o equipos de RRHH multi-país. Coordinemos una demo y te mostramos cómo funciona NOVA. Podés escribir a cualquiera de nuestro equipo o a ambos a la vez.
+                Buscamos organizaciones con alto volumen de aplicaciones o equipos de recursos humanos multi-país. Coordinemos una demostración y presentaremos el funcionamiento de NOVA. Puede dirigirse a cualquiera de nuestros interlocutores o a ambos.
               </p>
             </Reveal>
             <Reveal delayMs={80}>
@@ -521,10 +586,10 @@ export default function App() {
             <Reveal delayMs={140}>
               <div className="footer-actions">
                 <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--large">
-                  Agendar en el calendario
+                  Reservar en el calendario
                 </a>
                 <a
-                  href={`mailto:${contacts.map((c) => c.email).join(",")}?subject=${encodeURIComponent("Consulta NOVA — Demo")}`}
+                  href={`mailto:${contacts.map((c) => c.email).join(",")}?subject=${encodeURIComponent("Consulta NOVA — Demostración")}`}
                   className="btn btn--ghost btn--large"
                 >
                   Escribir por correo
